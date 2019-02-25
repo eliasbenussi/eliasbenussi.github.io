@@ -27,15 +27,76 @@ exactly that: manage a number of threads and their access of common memory,
 possibly using locks and synchronisation mechanism to avoid race conditions and
 deadlocks.
 
+## Concurrency in Python - threads, shared memory and locking
+
 As I work surrounded by data scientists and data engineers, I got accustomed to
 people having Python as a primary language. I am not exactly an expert in Python,
 but I have had the opportunity to use it in a concurrent scenario, and when I
 did I relied on the [Asyncio][ASYNCIO] library. This library is useful because
-Python
+Python does not have much native support for multi-threaded programming. Here
+is an example of a ping-pong system:
+
+{% highlight python %}
+def ping():
+    println("ping")
+print_hi('Tom')
+#=> prints 'Hi, Tom' to STDOUT.
+{% endhighlight %}
+
+The model here is that there are multiple threads, which access common memory
+and locking infrastructure is in place to prevent dangerous access.
 
 [ASYNCIO]: https://docs.python.org/3/library/asyncio.html
 
+So how do message passing and actors work?
 
+## Actors & message passing
+
+In actors the idea is that you have agents, called actors, whose internal
+execution is strictly sequential, and therefore safe. However actors can send
+each other asynchronous messages, and execution across actors is concurrent.
+Actors generally have rules for sharing memory by sending messages to each other
+that - if they don't guarantee safety by design - I contend they at least
+encourage thinking about concurrency in a way that is less conducive of errors,
+because memory is shared _explicitly_.
+
+In order to send a message to an actor, its reference must be known. Furthemore
+and actor receives messages in its Mailbox. While this is not strictly ubiquitous
+and there are exceptions (e.g. selectors from rice university) in general there
+is a one-to-one relationship between actor and mailbox.
+
+Message passing bears some similarities with the actor model, in the sense that
+memory is shared _explicitly_ via messages, however there is a key difference.
+There are two first class entities in message passing: processes and channels.
+Processes can communicate with each other sending messages over shared channels.
+Just like an actor, process's internal execution is sequential, while its
+communication is concurrent. However communication between process A and B does
+not revolve always around the same mailboxes. Channels can be created and
+shared, and two processes can communicate using several channels.
+
+This is the minimal intuition behind actors and message passing for now, although
+I plan to explore more the details in future posts.
+
+## Actors with Akka (mention Pony)
+
+## Message passing with Erlang/Go
+
+## Time for demistification
+TODO: Deadlock and race condition with actors and message passing
+
+## Conclusion
+
+Communicating to share memory is not the silver bullet for correctness in
+concurrent programs, but I believe exploring it has two advantages:
+- paradigm shift in thinking about concurrency. It has been for me an
+  interesting learning experience
+- In practice it encourages better practices. Having to explicitly think about
+  sharing memory implies forcing the developer to think about correctness when
+  performing a potentially dangerous action
+
+
+
+==============================================================================
 
 
 What has always been hard in concurrent programming is how to deal with memory sharing across concurrent processes
