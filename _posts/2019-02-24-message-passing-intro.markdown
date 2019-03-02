@@ -35,6 +35,7 @@ but I have had the opportunity to use it in a concurrent scenario, and when I
 did I relied on the [Asyncio][ASYNCIO] library. This library is useful because
 Python does not have much native support for multi-threaded programming. Here
 is an example of a ping-pong system:
+Only as of Python 3.7 are `async` and `await` keywords.
 
 {% highlight python %}
 def ping():
@@ -88,11 +89,19 @@ TODO: Deadlock and race condition with actors and message passing
 
 Communicating to share memory is not the silver bullet for correctness in
 concurrent programs, but I believe exploring it has two advantages:
-- paradigm shift in thinking about concurrency. It has been for me an
-  interesting learning experience
-- In practice it encourages better practices. Having to explicitly think about
-  sharing memory implies forcing the developer to think about correctness when
-  performing a potentially dangerous action
+- Since it is a paradigm shift in thinking about concurrency, it provides a
+  different perspective when thinking about correctness. As previously mentioned
+  concurrency is hard and distributed systems are complex and we can benefit
+  from any mental model that helps us think about these things systematically.
+  In this sense it is useful even just as a thought experiment.
+- I actually believe there is a practical benefit in using this paradigms.
+  I believe that the fact that communication forces you to be _explicit_  about
+  sharing memory, it encourages thoughtfullness around dangerous actions, and it
+  leads to better practices.
+It is also worth noting that this is a minimal summary of actors and message
+passings and what they entail. I am hoping to continue writing about this
+topics, with the hope to eventually get onto more niche -- yet intriguing --
+topics such as _reference capabilities_ and _session types_.
 
 
 
