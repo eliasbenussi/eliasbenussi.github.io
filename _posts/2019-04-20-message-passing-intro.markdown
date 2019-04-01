@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Threads, actors and message passing - different paradigms for concurrent programming"
+title:  "Concurrent programming with message passing vs shared memory"
 date:   2019-02-24 18:26:00 +0000
 categories: jekyll update
 ---
@@ -29,25 +29,80 @@ deadlocks.
 
 ## Concurrency in Python - threads, shared memory and locking
 
-As I work surrounded by data scientists and data engineers, I got accustomed to
-people having Python as a primary language. I am not exactly an expert in Python,
-but I have had the opportunity to use it in a concurrent scenario, and when I
-did I relied on the [Asyncio][ASYNCIO] library. This library is useful because
-Python does not have much native support for multi-threaded programming. Here
-is an example of a ping-pong system:
-Only as of Python 3.7 are `async` and `await` keywords.
+I would not call Python my primary language, however since it is so predominant
+in the data science world, I have been using it at work, and more importantly I
+have had the opportunity to see its use in concurrent scenarios.
 
-{% highlight python %}
-def ping():
-    println("ping")
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+Support for concurrent programming in Python is relatively new, however the
+ecosystem is fast expanding. Currently there seem to be three primary
+concurrency modules: `asyncio`, `threading` and `multiprocessing`.
+I intend to explore their purposes and differences in the future, but for this
+post I will use them to present the two topical concepts: concurrency though
+shared memory vs message passing.
+
 
 The model here is that there are multiple threads, which access common memory
 and locking infrastructure is in place to prevent dangerous access.
 
 [ASYNCIO]: https://docs.python.org/3/library/asyncio.html
+
+{% highlight python %}
+from multiprocessing import Process, Pipe
+import os
+
+def chef_f(chef_restaurant_conn, chef_waiter_conn):
+    food_state = chef_restaurant_conn.recv()
+    print("chef preparing food...")
+    food_state.append("PREPARED")
+    chef_waiter_conn.send(food_state)
+
+def waiter_f(waiter_chef_conn, waiter_restaurant_conn):
+    food_state = waiter_chef_conn.recv()
+    print("waiter about to serve")
+    food_state.append("PREPARED")
+    waiter_restaurant_conn.send(food_state)
+
+def restaurant():
+    print('restaurant processing order')
+    food_state = ["ORDERED"]
+
+    restaurant_chef_conn, chef_restaurant_conn = Pipe()
+    chef_waiter_conn, waiter_chef_conn = Pipe()
+    restaurant_waiter_conn, waiter_restaurant_conn = Pipe()
+    print('create connections')
+
+    waiter = Process(
+        target=waiter_f,
+        args=(waiter_chef_conn, waiter_restaurant_conn))
+    waiter.start()
+    print('generated waiter process')
+
+    chef = Process(
+        target=chef_f,
+        args=(chef_restaurant_conn, chef_waiter_conn))
+    chef.start()
+    print('generated chef process')
+
+    restaurant_chef_conn.send(food_state)
+    print(restaurant_waiter_conn.recv())
+
+    chef.join()
+    waiter.join()
+
+def main():
+    restaurant()
+
+if __name__ == '__main__':
+    main()
+#=> prints:
+# restaurant processing order
+# create connections
+# generated waiter process
+# generated chef process
+# chef preparing food...
+# waiter about to serve
+# ['ORDERED', 'PREPARED', 'PREPARED']
+{% endhighlight %}
 
 So how do message passing and actors work?
 

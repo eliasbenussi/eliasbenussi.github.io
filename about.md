@@ -18,8 +18,7 @@ on topics and projects that I am currently working on.
 
 ## Contact
 
-Elias Benussi<br>
-email: `elias (at) faculty (dot) ai`<br>
+Email: `elias (at) faculty (dot) ai`<br>
 My [LinkedIn][Elias-LikedIn]<br>
 My [Curriculum Vitae][CV]<br>
 My [GitHub][GH] account <br>
