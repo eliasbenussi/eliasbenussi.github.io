@@ -25,7 +25,7 @@ My [GitHub][GH] account <br>
 
 
 [CV]: {{ "/public/eliasbenussi-cv.pdf" | relative_url }}
-[GH]: http://github.org/eliasbenussi/
+[GH]: https://github.com/eliasbenussi
 [Elias-LikedIn]: https://www.linkedin.com/in/elias-benussi-24760596/
 [Faculty-website]: https://faculty.ai/
 [ICL]: https://www.imperial.ac.uk/
