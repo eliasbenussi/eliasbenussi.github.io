@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "An easy to remember disambiguation between concurrent, parallel and asynchronous"
-date:   2019-02-24 18:26:00 +0000
+title:  "Concurrent vs parallel vs asynchronous"
+date:   2019-04-12 18:30:00 +0000
 categories: jekyll update
 ---
 
