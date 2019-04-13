@@ -30,7 +30,7 @@ Define an order:
 
 ## Concurrent execution
 
-Concurrent, parallel, asynchronous are all terms to describe the execution of
+Concurrent, parallel, asynchronous are all used to describe the execution of
 tasks. However, the most basic tasks are sequential ones: these are composed of
 a number of steps and are executed in order.
 
@@ -71,7 +71,7 @@ overall process, but I can also imagine doing the following:
 In fact, since the composing sequential processes (tying a single shoe) are
 themselves composed of subtasks, any permutation of these that maintains the
 relative order for each shoe results in a valid execution.
-This is because the tying of two shoes is not a sequential process,
+This is because tying multiple shoes is not a sequential process,
 but a concurrent one.
 
 
@@ -83,18 +83,21 @@ to be the whole of process A first and then the whole of process B.
 A key concept at this point is that of time-slicing
 -->
 
-It is important to notice at this point that the total time of execution does
+Additionally, notice that the total time of execution does
 not change with different execution orders. Concurrency only refers to the
 ability to have multiple correct orders of execution, but does not lead to any
 performance improvements in principle. This changes with parallelism
 
 ## Parallel execution
 
-It is by now renown that parallel execution allows to leverage multi-core
-hardware to execute programs faster.
-But how does this work? The jist is that in concurrent programs, some steps are
-independent from each other (these are the one that can be executed in either
-order) and can therefore be executed independently on different cores.
+Parallelism is the idea of leveraging multi-core hardware to execute different
+steps of a program simultaneously, and it is thus often discussed in the
+context of high performance computing.
+But how does this work? As you may have guessed, it is not a silver bullet to
+high performance, and it only provides benefits on programs that are
+concurrent by nature. The gist is that steps that are independent from each
+other in concurrent programs (these are the one that can be executed in either
+order) can be executed simultaneously on different cores.
 
 In order to understand this, it's important to separate the concept of a task
 to be executed, and the actual executor.
@@ -115,9 +118,10 @@ Different traces mixing shoes between executors would also be valid
 As we can see this is perfectly parallelisable, and using two executors leads to
 a 2x speed up.
 
-So to reiterate, parallelism leverages causal independence between substeps of
-a concurrent task to execute them at the same time on multiple cores thus
-achieving performance improvements.
+To reiterate, parallelism leverages causal independence between sub-steps of
+a concurrent task. This allows us to execute them at the same time on multiple
+cores, leading to performance improvements.
+
 
 ## Asynchronous execution
 
@@ -128,19 +132,20 @@ Assuming we have one executor (thread, or core), this has the
 responsibility of actually performing tasks or subtasks. However it does not
 decide what to run next: that is the responsibility of the scheduler.
 
-Let's now go back to our shoes example. Imagine that for some reason, you don't
+Going back to the shoes-tying example. Imagine that for some reason, you don't
 know how to finish the basic shoe knot (probably the case at some point in your
 childhood). In this case you might ask someone else to do it (your parents).
-However while they are finishing the knot, you might as well start tying the
-other shoe, as otherwise you'd be waiting idle! This is asynchronous execution
+However, you might as well start tying the other shoe while they are finishing
+the knot, as otherwise you'd be waiting idle! This is asynchronous execution
 in a nutshell: the scheduler yields control of your local executor (your hands)
 to carry on with other tasks while the one you were considering is being handled
 by an external executor.
 
-
+<!--
 when you are little, you put your shoes on, you know how to set up the simple
 knot but not the main one. So you ask your mum. but while she does that, your
 hands are free, so you might as well start setting up the other shoe.
+-->
 
 <!--
 This is asynchronous execution: you delegate part of the computation to an
@@ -150,7 +155,7 @@ so they can carry on with other tasks not dependent on that result
 (the other shoe)
 -->
 
-In practice this is really useful when it is important to be able to carry on
+In practice, this is really useful when it is important to be able to carry on
 and be responsive while lengthy computations are being executed (e.g. servers,
 GUI, etc).
 
@@ -170,23 +175,19 @@ finish the knot, and that external execution is represented by `...`:
 |----|----|----|----|----|----|----|
 | Put shoe on (LS) | Create overhand knot (LS) | Put shoe on (RS) | Create overhand knot (RS) | Create double knot (LS) | ... | Create double knot (RS) |
 
-It is worth noting that while not the primary goal, yielding control actually
-led to shorter execution time. This is because when yielding control we are
+It is worth noting that yielding control led to shorter execution time, despite
+this not being the primary goal. This is because when yielding control we are
 _de facto_ performing parallel execution. In
 the above example, at time t3 progress is being made on two fronts, as the local
 executor makes progress with the RS while the external executor is progressing
 with the LS.
 
 
-## To conclude…
+## To conclude
 
-In practice your systems may well do a bit of everything, i.e. be parallel and
-asynchronous (both of which have concurrent as a prerequisite) however from a
+In practice, your systems may well combine the approaches, i.e. be parallel and
+asynchronous (both of which have concurrent as a prerequisite). However, from a
 conceptual perspective there are no extra complications, they just happen to
 have multiple cores available, and to depend on an external execution as
 described in the sections above.
 
-
-<!--
-How to do justified text?
--->
