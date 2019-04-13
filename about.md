@@ -24,7 +24,7 @@ My [Curriculum Vitae][CV]<br>
 My [GitHub][GH] account <br>
 
 
-[CV]: {{ "/public/eliasbenussi-cv.pdf" | relative_url }}
+[CV]: {{ "/public/EliasBenussiCV.pdf" | relative_url }}
 [GH]: https://github.com/eliasbenussi
 [Elias-LikedIn]: https://www.linkedin.com/in/elias-benussi-24760596/
 [Faculty-website]: https://faculty.ai/
