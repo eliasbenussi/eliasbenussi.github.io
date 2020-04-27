@@ -28,7 +28,7 @@ this post, I will just help you hack your way to victory for now.
 
 First, install `brew` following the instructions at:
 
-Then install `pyenv` and `virtualenv`. I recommend reading this blog  https://acroz.dev/2016/12/21/pyenv/ .
+Then install `pyenv` and `virtualenv`. I recommend reading this blog  <https://acroz.dev/2016/12/21/pyenv/>.
 
 Then setup your global environment. I assume you called it `global` below. If not just modify the
 commands accordingly
@@ -63,7 +63,7 @@ like). We will use `crontab`, a tool to execute jobs on a schedule. Run `man cro
 information on how to use `crontab` and what it can do.
 The format it takes for specifying jobs and schedule is: <cron expression> <command>. You can learn
 about cron expressions, but they are a bit tricky and it's good to validate them. Personally I like
-to use https://crontab.guru/ to check (or maybe even generate ;) ) my expressions before using them.
+to use <https://crontab.guru/> to check (or maybe even generate ;) ) my expressions before using them.
 To execute something every ten minutes the expression is `*/10 * * * *`.
 
 The command we want to execute is similar to what we have been executing up to now, except that we
@@ -84,7 +84,7 @@ directory and call it `cronjobs-speedtest`, with this content:
 Then in the terminal, in the `speedtest` directory, run `crontab cronjobs-speedtest` to establish a
 scheduled job with the content of that file. You can run `crontab -l` to check the current schedule
 after. You might want to test it initially with higher frequency, say once a minute: just find the
-cron expression using https://crontab.guru/, update the file and then run `crontab cronjobs-speedtest` again.
+cron expression using <https://crontab.guru/>, update the file and then run `crontab cronjobs-speedtest` again.
 
 
 ### Detect low speed:
