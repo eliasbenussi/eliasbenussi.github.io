@@ -7,6 +7,7 @@ categories: jekyll update
 
 I decided to monitor my internet speed over the course of the past few days, and had fun
 figuring out how to do so programmatically. I decided to document the steps I followed.
+I put all the code here: <https://github.com/eliasbenussi/speedtest>
 
 First thing you want to do is to create a folder that will contain all the files we will need.
 I stored everything under `~/Development/speedtest`. For simplicity I suggest to do the same
@@ -102,9 +103,94 @@ as the file name.
 So firstly in your terminal under `speedtest` create a `history` directory like you did before.
 Then copy the following code in a file called `calculate-speed-statistics.py`:
 
-```
-code
-```
+{% highlight python %}
+import os
+import json
+from datetime import datetime
+
+
+HOME = os.getenv("HOME")
+RAW_DATA = HOME + "/Development/speedtest/raw/speeds.json"
+
+
+def read_raw_speeds():
+    with open(RAW_DATA) as f:
+        lines = f.read().splitlines()
+
+    measurements = {}
+    key = None
+    for i, l in enumerate(lines):
+        if i % 4 == 0:
+            # It's a date
+            key = l
+        if i % 4 == 1:
+            # It's an entry
+            d = json.loads(l)
+            download = float("%.5g" % (d["download"] / 10 ** 6))
+            upload = float("%.5g" % (d["upload"] / 10 ** 6))
+            measurements[key] = (download, upload)
+
+    return measurements
+
+
+def find_mean_speed(measurements):
+    downloads, uploads = zip(*measurements.values())
+
+    mean_download = sum(downloads) / len(downloads)
+    mean_upload = sum(uploads) / len(uploads)
+
+    mean_speeds = [
+        "Download average speed is: {}Mbit/s".format(mean_download),
+        "Upload average speed is: {}Mbit/s".format(mean_upload),
+    ]
+
+    return mean_speeds
+
+
+def find_all_breaches(measurements):
+    breaches = []
+    for date, (download, upload) in measurements.items():
+        if download < 50 and upload < 7:
+            breaches.append(
+                "{}: Breach with download at {}Mbit/s and upload at {}Mbit/s".format(
+                    date, download, upload
+                )
+            )
+        elif download < 50:
+            breaches.append(
+                "{}: Breach with download at {}Mbit/s".format(date, download)
+            )
+        elif upload < 7:
+            breaches.append("{}: Breach with upload at {}Mbit/s".format(date, upload))
+
+    return breaches
+
+
+def write_history(mean_speeds, all_breaches):
+    history_file = HOME + "/Development/speedtest/history/" + str(datetime.now())
+
+    with open(history_file, "w") as outfile:
+        for ms in mean_speeds:
+            outfile.write(ms + "\n")
+
+        outfile.write("\n")
+
+        for ab in all_breaches:
+            outfile.write(ab + "\n")
+
+
+def main():
+    measurements = read_raw_speeds()
+
+    mean_speeds = find_mean_speed(measurements)
+    all_breaches = find_all_breaches(measurements)
+
+    write_history(mean_speeds, all_breaches)
+
+
+if __name__ == "__main__":
+    main()
+{% endhighlight %}
 
 If you manually run `python calculate-speed-statistics.py` you will see it creates a file under
 `history` with a date as file name that contains the information we wanted.
@@ -126,6 +212,9 @@ say we do this every day at 23:58. To do this we again modify our cronjob adding
 command:
 
 ```
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
+55 23 * * * /usr/bin/python ~/Development/speedtest/calculate-speed-statistics.py
+58 23 * * * rm ~/Development/speedtest/raw/*
 ```
 
 And then run again `crontab cronjobs-speedtest`.
