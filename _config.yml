@@ -16,8 +16,7 @@
 title: Elias Benussi
 email: elias (at) faculty (dot) ai
 description: >- # this means to ignore newlines until "baseurl:"
-  I am Elias Benussi and this is my blog. I write to share and make sense of my
-  experiences and projects in software and data engineering
+  I am Elias Benussi and this is my blog. I write to make sense of my experiences and projects. Mostly computer science stuff, some maybe interesting, definitely all ramblings of a confused mind. Welcome!
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
