@@ -23,9 +23,9 @@ Also open a terminal window and keep it there. We are going to use it quite a lo
 
 ### Prerequisites
 
-I assume below you know how to install packages and deal with python installations. If not feel
-free to follow the opinionated steps below. I won't go into details as it's beyond the scope of
-this post, I will just help you hack your way to victory for now.
+I assume below you know how to install packages and deal with python installations. If that's
+not the case feel free to follow the opinionated steps below. I won't go into details as it's
+beyond the scope of this post, I will just help you hack your way to victory for now.
 
 First, install `brew` following the instructions at: <https://brew.sh/>
 
@@ -51,7 +51,7 @@ directory calling `mkdir raw`.
 Then try executing:
 
 ```
-date >> raw/speeds.json; speedtest --single --secure --json >> raw/speeds.json; echo "\n" >> raw/speeds.json
+date >> raw/speeds.json; speedtest --single --secure --json >> raw/speeds.json; echo -e "\n" >> raw/speeds.json
 ```
 
 You can execute it two or three times and see that logs keep being added to that file.
@@ -72,14 +72,14 @@ will use full instead of relative paths, to make sure it can be execute from wha
 the file tree:
 
 ```
-date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
+date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
 ```
 
 Now that we know both the cron expression and the command, create a file in the `speedtest`
 directory and call it `cronjobs-speedtest`, with this content:
 
 ```
-*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/deleteme-3.7.0/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/deleteme-3.7.0/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
 ```
 
 Then in the terminal, in the `speedtest` directory, run `crontab cronjobs-speedtest` to establish a
@@ -212,7 +212,7 @@ say we do this every day at 23:58. To do this we again modify our cronjob adding
 command:
 
 ```
-*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
 55 23 * * * /usr/bin/python ~/Development/speedtest/calculate-speed-statistics.py
 58 23 * * * rm ~/Development/speedtest/raw/*
 ```
