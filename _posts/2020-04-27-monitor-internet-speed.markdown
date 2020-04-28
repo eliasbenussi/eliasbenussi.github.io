@@ -27,7 +27,7 @@ I assume below you know how to install packages and deal with python installatio
 free to follow the opinionated steps below. I won't go into details as it's beyond the scope of
 this post, I will just help you hack your way to victory for now.
 
-First, install `brew` following the instructions at:
+First, install `brew` following the instructions at: <https://brew.sh/>
 
 Then install `pyenv` and `virtualenv`. I recommend reading this blog  <https://acroz.dev/2016/12/21/pyenv/>.
 
