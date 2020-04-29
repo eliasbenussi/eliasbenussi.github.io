@@ -79,7 +79,7 @@ Now that we know both the cron expression and the command, create a file in the 
 directory and call it `cronjobs-speedtest`, with this content:
 
 ```
-*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/deleteme-3.7.0/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
 ```
 
 Then in the terminal, in the `speedtest` directory, run `crontab cronjobs-speedtest` to establish a
