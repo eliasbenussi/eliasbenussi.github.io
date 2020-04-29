@@ -68,7 +68,7 @@ to use <https://crontab.guru/> to check (or maybe even generate ;) ) my expressi
 To execute something every ten minutes the expression is `*/10 * * * *`.
 
 The command we want to execute is similar to what we have been executing up to now, except that we
-will use full instead of relative paths, to make sure it can be execute from whatever positions in
+will use full instead of relative paths, to make sure it can be executed from whatever positions in
 the file tree:
 
 ```
