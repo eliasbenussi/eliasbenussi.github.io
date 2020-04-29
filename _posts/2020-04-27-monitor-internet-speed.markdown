@@ -62,7 +62,7 @@ You can execute it two or three times and see that logs keep being added to that
 The next step is to be able to execute the above command every ten minutes (or however often you'd
 like). We will use `crontab`, a tool to execute jobs on a schedule. Run `man crontab` to get more
 information on how to use `crontab` and what it can do.
-The format it takes for specifying jobs and schedule is: <cron expression> <command>. You can learn
+The format it takes for specifying jobs and schedule is: `<cron expression> <command>`. You can learn
 about cron expressions, but they are a bit tricky and it's good to validate them. Personally I like
 to use <https://crontab.guru/> to check (or maybe even generate ;) ) my expressions before using them.
 To execute something every ten minutes the expression is `*/10 * * * *`.
