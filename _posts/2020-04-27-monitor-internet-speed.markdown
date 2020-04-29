@@ -51,8 +51,9 @@ directory calling `mkdir raw`.
 Then try executing:
 
 ```
-date >> raw/speeds.json; speedtest --single --secure --json >> raw/speeds.json; echo -e "\n" >> raw/speeds.json
+date >> raw/speeds.json; speedtest --single --secure --json >> raw/speeds.json; echo "\n" >> raw/speeds.json
 ```
+(I am using `zsh`. If you are using `bash` you may have to use `echo -e` to append that empty line)
 
 You can execute it two or three times and see that logs keep being added to that file.
 
@@ -72,14 +73,14 @@ will use full instead of relative paths, to make sure it can be executed from wh
 the file tree:
 
 ```
-date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
+date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
 ```
 
 Now that we know both the cron expression and the command, create a file in the `speedtest`
 directory and call it `cronjobs-speedtest`, with this content:
 
 ```
-*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
 ```
 
 Then in the terminal, in the `speedtest` directory, run `crontab cronjobs-speedtest` to establish a
@@ -212,7 +213,7 @@ say we do this every day at 23:58. To do this we again modify our cronjob adding
 command:
 
 ```
-*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo -e "\n" >> ~/Development/speedtest/raw/speeds.json
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
 55 23 * * * /usr/bin/python ~/Development/speedtest/calculate-speed-statistics.py
 58 23 * * * rm ~/Development/speedtest/raw/*
 ```
