@@ -51,9 +51,8 @@ directory calling `mkdir raw`.
 Then try executing:
 
 ```
-date >> raw/speeds.json; speedtest --single --secure --json >> raw/speeds.json; echo "\n" >> raw/speeds.json
+date >> raw/speeds.json; speedtest --single --secure --json >> raw/speeds.json
 ```
-(I am using `zsh`. If you are using `bash` you may have to use `echo -e` to append that empty line)
 
 You can execute it two or three times and see that logs keep being added to that file.
 
@@ -73,14 +72,14 @@ will use full instead of relative paths, to make sure it can be executed from wh
 the file tree:
 
 ```
-date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
+date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json
 ```
 
 Now that we know both the cron expression and the command, create a file in the `speedtest`
 directory and call it `cronjobs-speedtest`, with this content:
 
 ```
-*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json
 ```
 
 Then in the terminal, in the `speedtest` directory, run `crontab cronjobs-speedtest` to establish a
@@ -97,7 +96,7 @@ you are actually interested in: what is my average upload and download speed in 
 occasions was it especially low?
 
 Here I provide the script I am using to parse through the data in `raw/speeds.json` and convert it
-into human readable format. I won't go much into details other than saying it's a quick hack
+into human readable format. I won't go into much details other than saying it's a quick hack
 to get the aforementioned information, and save it into into a `history` directory, using the date
 as the file name.
 
@@ -121,10 +120,10 @@ def read_raw_speeds():
     measurements = {}
     key = None
     for i, l in enumerate(lines):
-        if i % 4 == 0:
+        if i % 2 == 0:
             # It's a date
             key = l
-        if i % 4 == 1:
+        if i % 2 == 1:
             # It's an entry
             d = json.loads(l)
             download = float("%.5g" % (d["download"] / 10 ** 6))
@@ -213,7 +212,7 @@ say we do this every day at 23:58. To do this we again modify our cronjob adding
 command:
 
 ```
-*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json; echo "\n" >> ~/Development/speedtest/raw/speeds.json
+*/10 * * * * date >> ~/Development/speedtest/raw/speeds.json; ~/.pyenv/versions/global/bin/speedtest --single --secure --json >> ~/Development/speedtest/raw/speeds.json
 55 23 * * * /usr/bin/python ~/Development/speedtest/calculate-speed-statistics.py
 58 23 * * * rm ~/Development/speedtest/raw/*
 ```
